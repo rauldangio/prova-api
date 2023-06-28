@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class ContasReceberDTO {
 
-    private int id;
+    private Long id;
 
     private Date dataConta;
 
@@ -13,18 +13,18 @@ public class ContasReceberDTO {
 
     private BigDecimal valorConta;
 
-    public ContasReceberDTO(int id, Date dataConta, String nomeCliente, BigDecimal valorConta) {
+    public ContasReceberDTO(Long id, Date dataConta, String nomeCliente, BigDecimal valorConta) {
         this.id = id;
         this.dataConta = dataConta;
         this.nomeCliente = nomeCliente;
         this.valorConta = valorConta;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

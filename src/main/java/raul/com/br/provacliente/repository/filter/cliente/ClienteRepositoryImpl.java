@@ -3,6 +3,7 @@ package raul.com.br.provacliente.repository.filter.cliente;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import raul.com.br.provacliente.model.Cliente;
 import raul.com.br.provacliente.repository.filter.ClienteFilter;
@@ -30,13 +31,25 @@ public class ClienteRepositoryImpl implements ClienteRepositoryQuery{
 
         Predicate[] predicates = criarFiltros(root, criteriaBuilder, clienteFilter);
         criteriaQuery.where(predicates);
-        criteriaQuery.orderBy(criteriaBuilder.asc(root.get("nome_cliente")));
+        criteriaQuery.orderBy(criteriaBuilder.asc(root.get("nomeCliente")));
 
         TypedQuery<Cliente> typedQuery = entityManager.createQuery(criteriaQuery);
         adicionarRestricoesDePaginacao(typedQuery, pageable);
 
 
-        return null;
+        return new PageImpl<>(typedQuery.getResultList(), pageable, total(clienteFilter));
+    }
+
+    private Long total(ClienteFilter clienteFilter) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Cliente> root = criteriaQuery.from(Cliente.class);
+
+        Predicate[] predicates = criarFiltros(root, criteriaBuilder, clienteFilter);
+        criteriaQuery.where(predicates);
+        criteriaQuery.orderBy(criteriaBuilder.asc(root.get("nomeCliente")));
+        criteriaQuery.select(criteriaBuilder.count(root));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
     private void adicionarRestricoesDePaginacao(TypedQuery<Cliente> typedQuery, Pageable pageable) {
@@ -50,7 +63,7 @@ public class ClienteRepositoryImpl implements ClienteRepositoryQuery{
 
         if (!StringUtils.isEmpty(clienteFilter.getNomeCliente()))
         {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("nome_cliente")),
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("nomeCliente")),
                     "%" + clienteFilter.getNomeCliente().toLowerCase() + "%"
                     ));
         }

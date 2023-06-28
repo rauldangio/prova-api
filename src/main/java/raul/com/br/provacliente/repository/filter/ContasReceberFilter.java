@@ -1,5 +1,6 @@
 package raul.com.br.provacliente.repository.filter;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 public class ContasReceberFilter {
@@ -7,10 +8,7 @@ public class ContasReceberFilter {
     private String nomeCliente;
     private Date dataConta;
 
-    public ContasReceberFilter(String nomeCliente, Date dataConta) {
-        this.nomeCliente = nomeCliente;
-        this.dataConta = dataConta;
-    }
+
 
     public String getNomeCliente() {
         return nomeCliente;
@@ -25,6 +23,13 @@ public class ContasReceberFilter {
     }
 
     public void setDataConta(Date dataConta) {
+        this.dataConta = dataConta;
+    }
+
+
+
+    public ContasReceberFilter(String nomeCliente, Date dataConta) {
+        this.nomeCliente = nomeCliente;
         this.dataConta = dataConta;
     }
 }
